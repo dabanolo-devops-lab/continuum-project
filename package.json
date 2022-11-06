@@ -1,0 +1,30 @@
+{
+  "name": "continuum-project",
+  "version": "0.1.0",
+  "description": "Seamless ghost app",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dabanolo-devops-lab/continuum-project.git"
+  },
+  "keywords": [
+    "websocket",
+    "socketio",
+    "chat",
+    "node"
+  ],
+  "author": "Danny Bañol",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dabanolo-devops-lab/continuum-project/issues"
+  },
+  "homepage": "https://github.com/dabanolo-devops-lab/continuum-project#readme",
+  "dependencies": {
+    "socket.io": "^4.5.3"
+  }
+}
