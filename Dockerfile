@@ -1,7 +1,7 @@
 # adding node alpine image
 FROM node:gallium-alpine3.15
 # Install app dependencies
-COPY .. /app
+COPY . /app
 RUN npm install
 # Bundle app source
 EXPOSE 8080
