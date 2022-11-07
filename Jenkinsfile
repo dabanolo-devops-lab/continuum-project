@@ -1,5 +1,10 @@
 pipeline {
-  agent any
+  agent {
+    node {
+      label 'Node'
+    }
+
+  }
   stages {
     stage('Checkout code') {
       steps {
@@ -7,5 +12,8 @@ pipeline {
       }
     }
 
+  }
+  environment {
+    docker_tag = 'dabanolo/continuum'
   }
 }
