@@ -44,18 +44,7 @@ io.on('connection', (socket) => {
 });
 
 httpServer.listen(port, () => {
-    // get dirname
-
     console.log(`Listening on port ${port}`);
     console.log(`__dirname: ${__dirname}`);
     console.log(`__filename: ${__filename}`);
-    // console.log(`process.cwd(): ${process.cwd()}`);
-    // console.log(`process.argv: ${process.argv}`);
-    // console.log(`process.execPath: ${process.execPath}`);
-    // console.log(`process.execArgv: ${process.execArgv}`);
-    // console.log(`process.env: ${process.env}`);
-    // console.log(`process.version: ${process.version}`);
-    // console.log(`process.versions: ${process.versions}`);
-    // console.log(`process.config: ${process.config}`);
-    // console.log(`process.pid: ${process.pid}`);
 });
