@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Continuum Ghost Chat</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script defer src="client.js"></script>
+</head>
+<body>
+    <main class="container">
+        <section class="chat-container">
+            <div class="chat-header">
+                <h1>Continuum Ghost Chat</h1>
+            </div>
+            <div id="chat-messages"></div>
+            <div class="chat-form-container">
+                <form id="chat-form">
+                    <input id="chat-input" type="text" placeholder="Enter Message" required autocomplete="off">
+                    <button class="btn">Send</button>
+                </form>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

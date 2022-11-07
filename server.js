@@ -1,9 +1,6 @@
-// import { createServer } from 'http';
 import { Server } from 'socket.io';
 
 
-// const httpServer = createServer();
-// const io = new Server(httpServer, {
 const io = new Server(3000, {
     cors: {
         origin: '*',
@@ -13,7 +10,6 @@ const io = new Server(3000, {
 let appUsers = {};
 
 io.on('connection', (socket) => {
-    console.log('New client connected');
 
     socket.on('new-user', username => {
         appUsers[socket.id] = username;
@@ -28,5 +24,3 @@ io.on('connection', (socket) => {
     })
 
 });
-
-// io.listen(3000);
