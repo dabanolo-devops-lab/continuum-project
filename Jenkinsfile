@@ -1,11 +1,19 @@
 pipeline {
-  agent any
+  agent {
+    node {
+      label 'Node'
+    }
+
+  }
   stages {
-    stage('log') {
+    stage('Checkout code') {
       steps {
-        sh 'ls -la'
+        git(url: 'https://github.com/dabanolo-devops-lab/continuum-project', branch: 'main')
       }
     }
 
+  }
+  environment {
+    docker_tag = 'dabanolo/continuum'
   }
 }
