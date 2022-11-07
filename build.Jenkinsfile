@@ -3,15 +3,19 @@ pipeline {
     node {
       label 'Node'
     }
-
+  }
+  environment {
+    docker_tag = 'aetherbit/continuum'
+    remote_host = credentials('delta-ip')
+    buildJob = ''
   }
   stages {
     stage('get buildID') {
-        steps {
-            script {
-                buildJob = sh(script: "cat ~/buildID.txt", returnStdout: true).trim()
-            }
+      steps {
+        script {
+          buildJob = sh(script: "cat ~/buildID.txt", returnStdout: true).trim()
         }
+      }
     }
     stage('SSH to remote host') {
       steps {
@@ -21,11 +25,5 @@ pipeline {
         }
       }
     }
-
-  }
-  environment {
-    docker_tag = 'aetherbit/continuum'
-    remote_host = credentials('delta-ip')
-    buildJob = ''
   }
 }
