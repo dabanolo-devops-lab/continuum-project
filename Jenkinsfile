@@ -25,7 +25,7 @@ pipeline {
     }
     stage('set BuildID') {
       steps {
-        sh('echo ${BUILD_ID} > buildID.txt')
+        sh('echo ${BUILD_ID} > ~/buildID.txt')
       }
     }
 

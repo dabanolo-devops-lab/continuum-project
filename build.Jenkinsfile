@@ -9,7 +9,7 @@ pipeline {
     stage('get buildID') {
         steps {
             script {
-                buildJob = sh(script: cat ../pull-to-instance/buildID.txt, returnStdout: true).trim()
+                buildJob = readFile file: '~/buildID.txt'
             }
         }
     }
