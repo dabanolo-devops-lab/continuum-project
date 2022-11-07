@@ -7,17 +7,10 @@ pipeline {
   environment {
     docker_tag = 'aetherbit/continuum'
     remote_host = credentials('delta-ip')
-    buildJob = ''
+    buildJob = sh(script: "cat ~/buildID.txt", returnStdout: true).trim()
   }
   stages {
-    stage('get buildID') {
-      steps {
-        script {
-          buildJob = sh(script: "cat ~/buildID.txt", returnStdout: true).trim()
-        }
-      }
-    }
-    stage('SSH to remote host') {
+    stage('Pull image') {
       steps {
         sshagent(['jenkins-ssh']) {
         //   sh('ssh -o StrictHostKeyChecking=no -i ~/.ssh/delta_key ubuntu@${remote_host} "docker pull ${docker_tag}:1.0.0-${BUILD_ID}"')
