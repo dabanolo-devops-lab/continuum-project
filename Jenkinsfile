@@ -18,8 +18,14 @@ pipeline {
       }
     }
 
+    stage('Deploy to Hub') {
+      steps {
+        sh 'docker push ${docker_tag}:1.0.0-${BUILD_ID}'
+      }
+    }
+
   }
   environment {
-    docker_tag = 'dabanolo/continuum'
+    docker_tag = 'aetherbit/continuum'
   }
 }
