@@ -31,5 +31,3 @@ pipeline {
     buildJob = ''
   }
 }
-
-ssh -i ~/.ssh/delta_key  delta@
