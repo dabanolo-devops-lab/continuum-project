@@ -23,6 +23,11 @@ pipeline {
         sh 'docker push ${docker_tag}:1.0.0-${BUILD_ID}'
       }
     }
+    stage('set BuildID') {
+      steps {
+        sh('echo ${BUILD_ID} > buildID.txt')
+      }
+    }
 
   }
   environment {
