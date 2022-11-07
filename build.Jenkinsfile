@@ -10,7 +10,7 @@ pipeline {
         steps {
             script {
                 // buildJob = readFile file: '~/buildID.txt'
-                buildJob = sh(script: "cat VERSION.txt", returnStdout: true).trim()
+                buildJob = sh(script: "cat ~/buildID.txt", returnStdout: true).trim()
                 echo "buildID: ${buildJob}"
             }
         }
