@@ -34,10 +34,10 @@ io.on('connection', (socket) => {
         socket.broadcast.emit('user-connected', username);
     })
     socket.on('send-chat-message', message => {
-        socket.broadcast.emit('chat-message', { message: message, name: appUsers[socket.id] })
+        socket.broadcast.emit('chat-message', { message: message, name: socket.id })
     })
     socket.on('disconnect', () => {
-        socket.broadcast.emit('user-disconnected', appUsers[socket.id])
+        socket.broadcast.emit('user-disconnected', socket.id)
         delete appUsers[socket.id];
     })
 
