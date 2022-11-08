@@ -8,7 +8,7 @@ pipeline {
     DOCKER_TAG = 'continuum-app'
     CONTAINER_NAME = 'continuum-project'
     REMOTE_HOST = credentials('REMOTE_CONTAINER')
-    KEY_PATH = credendials('key-dir')
+    KEY_PATH = credentials('key-dir')
     BUILD_ID = sh(script: "cat /home/ubuntu/jenkins/buildID.txt", returnStdout: true).trim()
   }
   stages {
