@@ -22,13 +22,11 @@ socket.on('user-disconnected', name => {
 socket.emit('new-user', `User ${socket.id}`);
 
 const publishMessage = msg => {
-    // create new element to append to the DOM
     const newMessage = document.createElement('p');
-    // set the element with an id with time reference
-    newMessage.id = Date.now().toString;
-    // set the element with the message
+    newMessage.id = Date.now().toString();
+    newMessage.setAttribute('data-socket-id', socket.id);
+    newMessage.getAttribute('data-socket-id') === socket.id ? newMessage.className = 'user-message' : newMessage.className = 'other-message';
     newMessage.innerText = msg;
-    // append the element to the DOM
     document.getElementById('chat-messages').appendChild(newMessage);
 }
 
