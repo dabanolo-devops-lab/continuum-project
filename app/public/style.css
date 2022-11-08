@@ -58,10 +58,11 @@ main{
 }
 #chat-messages{
   display: flex;
-  flex-flow: column wrap;
+  flex-flow: column nowrap;
   margin: 2rem 0;
   flex: auto;
   justify-content: flex-end;
+  overflow-y: hidden;
 }
 .user-message, .other-message{
   display: flex;
