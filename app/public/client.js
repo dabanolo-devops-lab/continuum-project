@@ -12,7 +12,7 @@ socket.on('user-connected', name => {
 });
 
 socket.on('chat-message', data => {
-    publishMessage(data.name + ': ' + data.message);
+    publishMessage(data.message, data.name);
 });
 
 socket.on('user-disconnected', name => {
@@ -21,10 +21,10 @@ socket.on('user-disconnected', name => {
 
 socket.emit('new-user', `User ${socket.id}`);
 
-const publishMessage = msg => {
+const publishMessage = (msg, keyId) => {
     const newMessage = document.createElement('p');
     newMessage.id = Date.now().toString();
-    newMessage.setAttribute('data-socket-id', socket.id);
+    newMessage.setAttribute('data-socket-id', keyId);
     newMessage.getAttribute('data-socket-id') === socket.id ? newMessage.className = 'user-message' : newMessage.className = 'other-message';
     newMessage.innerText = msg;
     document.getElementById('chat-messages').appendChild(newMessage);
