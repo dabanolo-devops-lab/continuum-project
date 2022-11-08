@@ -14,13 +14,13 @@ pipeline {
 
     stage('Build') {
       steps {
-        sh 'docker build -f Dockerfile -t ${docker_tag}:1.0.0-${BUILD_ID} . '
+        sh 'docker build -f Dockerfile -t 210220393398.dkr.ecr.us-east-2.amazonaws.com/${docker_tag}:1.0.0-${BUILD_ID} . '
       }
     }
 
     stage('Deploy to Hub') {
       steps {
-        sh 'docker push ${docker_tag}:1.0.0-${BUILD_ID}'
+        sh 'docker push 210220393398.dkr.ecr.us-east-2.amazonaws.com/${docker_tag}:1.0.0-${BUILD_ID}'
       }
     }
     stage('set BuildID') {
