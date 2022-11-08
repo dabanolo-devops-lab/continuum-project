@@ -31,6 +31,6 @@ pipeline {
 
   }
   environment {
-    docker_tag = 'aetherbit/continuum'
+    docker_tag = 'continuum-app'
   }
 }
