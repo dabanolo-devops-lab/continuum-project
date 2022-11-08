@@ -15,7 +15,7 @@ pipeline {
     stage('Pull image') {
       steps {
         sshagent(['jenkins-ssh']) {
-          sh('ssh -o StrictHostKeyChecking=no -i ${KEY_PATH} ${REMOTE_HOST} "docker kill $(docker ps -q) 2>/dev/null && echo $? && docker system prune -a -f && docker pull 210220393398.dkr.ecr.us-east-2.amazonaws.com/${DOCKER_TAG}:1.0.0-${BUILD_ID} && docker run --name ${CONTAINER_NAME} -p 80:8080 -p 3000:3000 -d 210220393398.dkr.ecr.us-east-2.amazonaws.com/${DOCKER_TAG}:1.0.0-${BUILD_ID}"')
+          sh('ssh -o StrictHostKeyChecking=no -i ${KEY_PATH} ${REMOTE_HOST} "docker ps -aq | xargs docker stop | xargs docker rm 2>/dev/null && echo $? && docker pull 210220393398.dkr.ecr.us-east-2.amazonaws.com/${DOCKER_TAG}:1.0.0-${BUILD_ID} && docker run --name ${CONTAINER_NAME} -p 80:8080 -p 3000:3000 -d 210220393398.dkr.ecr.us-east-2.amazonaws.com/${DOCKER_TAG}:1.0.0-${BUILD_ID}"')
         }
       }
     }
