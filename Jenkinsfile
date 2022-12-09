@@ -1,36 +1,67 @@
+def COLOR_MAP = [
+    'SUCCESS': 'good', 
+    'FAILURE': 'danger',
+]
+
 pipeline {
-  agent {
-    node {
-      label 'Node'
+
+    agent 'node'
+
+    environment {
+        TESTING =""
     }
 
-  }
-  stages {
-    stage('Checkout code') {
-      steps {
-        git(url: 'https://github.com/dabanolo-devops-lab/continuum-project', branch: 'main')
-      }
+    options {
+        ansiColor('xterm')
     }
 
-    stage('Build') {
-      steps {
-        sh 'docker build -f Dockerfile -t 210220393398.dkr.ecr.us-east-2.amazonaws.com/${DOCKER_TAG}:1.0.0-${BUILD_ID} . '
-      }
-    }
+    // agent {
+    //     node {
+    //         label 'node'
+    //     }
+    // }
 
-    stage('Deploy to Hub') {
-      steps {
-        sh 'docker push 210220393398.dkr.ecr.us-east-2.amazonaws.com/${DOCKER_TAG}:1.0.0-${BUILD_ID}'
-      }
-    }
-    stage('set BuildID') {
-      steps {
-        sh('echo ${BUILD_ID} > /home/ubuntu/jenkins/buildID.txt')
-      }
-    }
+    stages {
+        
+        stage('Checkout Sources') {
+            steps {
+                // git branch: 'dev', credentialsId: 'jenkins-dabanolo-continuum', url: 'https://github.com/dabanolo-devops-lab/continuum-project'
+                sh 'echo "Hello World"'
+            }
+        }
+    
+        stage('Build') {
+            steps {
+                sh 'docker images prune'
+                sh 'docker build -t testing .'
+                sh 'docker tag testing:latest dabanolo/testing:latest'
+            }
+        }
+        
+        stage('Unit Testing') {
+            steps {
+                sh 'docker run --tty dabanolo/testing:latest npm test'
+            }
+        }
 
-  }
-  environment {
-    DOCKER_TAG = 'continuum-app'
-  }
+        stage('Scan w/ Trivy') {
+            steps {
+                sh 'trivy image dabanolo/testing:latest'
+            }
+        }
+            // stage('Scan w/ Anchore') {
+            //     steps {
+            //         sh 'grype dabanolo/testing:latest --scope all-layers'
+            //     }
+            // }
+        stage('Deploy'){
+            steps {
+                input message: 'Which branch and environment do you want to deploy?',
+                parameters: [
+                choice(name: 'BRANCH', choices: ['master', 'dev'], description: 'Branch'),
+                choice(name: 'ENVIRONMENT', choices: ['prod', 'staging'], description: 'Environment')
+                ]
+            }
+        }
+    }
 }
