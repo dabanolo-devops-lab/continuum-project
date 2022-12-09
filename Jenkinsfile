@@ -137,9 +137,6 @@ pipeline {
             environment{
                 BUILDV = sh(script: "cat /home/ubuntu/jenkins/buildID.txt", returnStdout: true).trim()
             }
-            parameters {
-                choice(name: 'ENVIRONMENT', choices: ['production', 'staging'], description: 'Environment')
-            }
             when {
                 branch 'main'
             }
