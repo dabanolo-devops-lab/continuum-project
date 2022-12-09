@@ -105,19 +105,19 @@ pipeline {
                 branch 'main'
             }
             environment{
-                withAWS(region:'us-east-1',credentials:'dabanolo-aws-credentials'){
-                    EXEC_ROLE = sh(script: "aws --region=us-east-1 ssm get-parameter --name '/production/chatapp/ecs/exec_role' --output text --query Parameter.Value", returnStdout: true).trim()
 
-                    TASK_ROLE = sh(script: "aws --region=us-east-1 ssm get-parameter --name '/production/chatapp/ecs/task_role' --output text --query Parameter.Value", returnStdout: true).trim()
+                EXEC_ROLE = credentials('aws-exec-role')
 
-                    NAME = sh(script: "aws --region=us-east-1 ssm get-parameter --name '/production/chatapp/ecr/name' --output text --query Parameter.Value", returnStdout: true).trim()
+                TASK_ROLE = credentials('aws-task-role')
 
-                    IMAGE = sh(script: "aws --region=us-east-1 ssm get-parameter --name '/production/chatapp/ecr/url' --output text --query Parameter.Value", returnStdout: true).trim()
+                NAME = credentials('cluster-name')
 
-                    BUILDV = sh(script: "cat /home/ubuntu/jenkins/buildID.txt", returnStdout: true).trim()
+                IMAGE = credentials('chat-ecr-repository')
 
-                    LOG_GROUP = sh(script: "aws --region=us-east-1 ssm get-parameter --name '/production/chatapp/cloudwatch/name' --output text --query Parameter.Value", returnStdout: true).trim()
-                }
+                BUILDV = sh(script: "cat /home/ubuntu/jenkins/buildID.txt", returnStdout: true).trim()
+
+                LOG_GROUP = '/ecs/chat-app'
+
 
             }
             steps{
