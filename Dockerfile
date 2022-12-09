@@ -1,5 +1,5 @@
 # adding node alpine image
-FROM node:gallium-alpine3.15
+FROM node:19.2-alpine
 # Install app dependencies
 WORKDIR /usr/src/app
 COPY ./app /usr/src/app
