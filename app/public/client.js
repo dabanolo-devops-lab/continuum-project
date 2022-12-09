@@ -1,5 +1,5 @@
+const socket = io('https://chat.dannybanol.dev/');
 // const socket = io('http://localhost:3000');
-const socket = io('http://3.134.48.58:3000');
 
 
 
