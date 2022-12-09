@@ -20,7 +20,9 @@ pipeline {
         
         stage('Checkout Sources') {
             when {
-                branch 'dev'
+                not{
+                    branch 'main'
+                }
             }
             steps {
                 git branch: 'dev', credentialsId: 'jenkins-dabanolo-continuum', url: 'https://github.com/dabanolo-devops-lab/continuum-project'
@@ -29,7 +31,9 @@ pipeline {
     
         stage('Build') {
             when {
-                branch 'dev'
+                not{
+                    branch 'main'
+                }
             }
             steps {
                 sh 'docker images prune'
@@ -39,7 +43,9 @@ pipeline {
         
         stage('Unit Testing') {
             when {
-                branch 'dev'
+                not{
+                    branch 'main'
+                }
             }
             steps {
                 sh 'docker run --tty chatapp/testphase:${VERSION} npm test'
