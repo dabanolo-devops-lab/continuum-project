@@ -29,7 +29,7 @@ pipeline {
                 }
             }
             steps {
-                git branch: 'dev', credentialsId: 'jenkins-dabanolo-continuum', url: 'https://github.com/dabanolo-devops-lab/continuum-project'
+                git branch: '${BRANCH_NAME}', credentialsId: 'jenkins-dabanolo-continuum', url: 'https://github.com/dabanolo-devops-lab/continuum-project'
             }
         }
     
