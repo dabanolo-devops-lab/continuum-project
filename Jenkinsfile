@@ -5,7 +5,11 @@ def COLOR_MAP = [
 
 pipeline {
 
-    agent 'node'
+    agent {
+        node {
+            label 'node'
+        }
+    }
 
     environment {
         ECR_REPOSITORY = credentials('chat-ecr-repository')
