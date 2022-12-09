@@ -41,7 +41,7 @@ pipeline {
             }
             steps {
                 sh 'docker images prune'
-                sh 'docker build -t chatapp/testphase:${VERSION} .'
+                sh 'docker build -t chatapp/testphase:${BUILD_ID} .'
             }
         }
         
@@ -52,7 +52,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'docker run --tty chatapp/testphase:${VERSION} npm test'
+                sh 'docker run --tty chatapp/testphase:${BUILD_ID} npm test'
             }
         }
 
@@ -61,7 +61,16 @@ pipeline {
                 branch 'dev'
             }
             steps {
-                sh 'trivy image chatapp/testphase:${VERSION}'
+                sh 'trivy image chatapp/testphase:${BUILD_ID}'
+            }
+        }
+
+        stage('Create Build Version') {
+            when {
+                branch 'dev'
+            }
+            steps {
+                sh 'echo ${BUILD_ID} > /home/ubuntu/jenkins/buildID.txt'
             }
         }
 
@@ -78,10 +87,13 @@ pipeline {
             when {
                 branch 'main'
             }
+            environment{
+                BUILDV = sh(script: "cat /home/ubuntu/jenkins/buildID.txt", returnStdout: true).trim()
+            }
             steps {
                 withAWS(region:'us-east-1',credentials:'dabanolo-aws-credentials'){
                     sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ECR_REPOSITORY}'
-                    sh 'docker tag chatapp/testphase:${VERSION} ${ECR_REPOSITORY}/chat-app:${VERSION}'
+                    sh 'docker tag chatapp/testphase:${BUILDV} ${ECR_REPOSITORY}/chat-app:${BUILDV}'
                 }
             }
         }
@@ -89,6 +101,9 @@ pipeline {
         stage('Deploy'){
             when {
                 branch 'main'
+            }
+            environment{
+                BUILDV = sh(script: "cat /home/ubuntu/jenkins/buildID.txt", returnStdout: true).trim()
             }
             steps {
                 withAWS(region:'us-east-1',credentials:'dabanolo-aws-credentials'){
@@ -99,6 +114,7 @@ pipeline {
                         choice(name: 'ENVIRONMENT', choices: ['prod', 'staging'], description: 'Environment')
                     ]
                 }
+                sh 'echo "DONE"'
             }
         }
     }
