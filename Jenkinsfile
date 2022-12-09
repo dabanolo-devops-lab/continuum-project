@@ -138,14 +138,13 @@ pipeline {
             }
             environment{
                 BUILDV = sh(script: "cat /home/ubuntu/jenkins/buildID.txt", returnStdout: true).trim()
-                input message: 'Which branch and environment do you want to deploy?',
-                    parameters: [
-                        choice(name: 'ENVIRONMENT', choices: ['production', 'staging'], description: 'Environment')
-                    ]
             }
             steps {
                 withAWS(region:'us-east-1',credentials:'dabanolo-aws-credentials'){
-
+                    input message: 'Which branch and environment do you want to deploy?',
+                    parameters: [
+                        choice(name: 'ENVIRONMENT', choices: ['production', 'staging'], description: 'Environment')
+                    ]
                     if (env.ENVIRONMENT == 'production') {
                         sh 'cd /home/ubuntu/jenkins/terraform && terraform init && terraform apply -auto-approve'
                     }
