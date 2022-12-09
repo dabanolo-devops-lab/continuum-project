@@ -121,7 +121,7 @@ pipeline {
 
             }
             steps{
-                sh 'rm /home/ubuntu/jenkins/main.tf'
+                sh 'rm /home/ubuntu/jenkins/terraform/main.tf'
                 sh 'cp /home/ubuntu/jenkins/templates/main.tf /home/ubuntu/jenkins/terraform/main.tf'
                 sh 'sed -i "s/1111111/${EXEC_ROLE}/g" /home/ubuntu/jenkins/terraform/main.tf'
                 sh 'sed -i "s/2222222/${TASK_ROLE}/g" /home/ubuntu/jenkins/terraform/main.tf'
