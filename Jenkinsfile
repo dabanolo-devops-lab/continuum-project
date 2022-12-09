@@ -123,12 +123,12 @@ pipeline {
             steps{
                 sh 'rm /home/ubuntu/jenkins/terraform/main.tf'
                 sh 'cp /home/ubuntu/jenkins/templates/main.tf /home/ubuntu/jenkins/terraform/main.tf'
-                sh 'sed -i "s/1111111/${EXEC_ROLE}/g" /home/ubuntu/jenkins/terraform/main.tf'
-                sh 'sed -i "s/2222222/${TASK_ROLE}/g" /home/ubuntu/jenkins/terraform/main.tf'
-                sh 'sed -i "s/3333333/${NAME}/g" /home/ubuntu/jenkins/terraform/main.tf'
-                sh 'sed -i "s/4444444/${IMAGE}/g" /home/ubuntu/jenkins/terraform/main.tf'
-                sh 'sed -i "s/5555555/${BUILDV}/g" /home/ubuntu/jenkins/terraform/main.tf'
-                sh 'sed -i "s/0000000/${LOG_GROUP}/g" /home/ubuntu/jenkins/terraform/main.tf'
+                sh(script: "sed -i 's/1111111/${EXEC_ROLE}/g' /home/ubuntu/jenkins/terraform/main.tf")
+                sh(script: "sed -i 's/2222222/${TASK_ROLE}/g' /home/ubuntu/jenkins/terraform/main.tf")
+                sh(script: "sed -i 's/3333333/${NAME}/g' /home/ubuntu/jenkins/terraform/main.tf")
+                sh(script: "sed -i 's/4444444/${IMAGE}/g' /home/ubuntu/jenkins/terraform/main.tf")
+                sh(script: "sed -i 's/5555555/${BUILDV}/g' /home/ubuntu/jenkins/terraform/main.tf")
+                sh(script: "sed -i 's/0000000/${LOG_GROUP}/g' /home/ubuntu/jenkins/terraform/main.tf")
             }
         }
 
