@@ -100,24 +100,57 @@ pipeline {
 
             }
         }
+        stage('Task Config'){
+            when {
+                branch 'main'
+            }
+            environment{
+                withAWS(region:'us-east-1',credentials:'dabanolo-aws-credentials'){
+                    EXEC_ROLE = sh(script: "aws --region=us-east-1 ssm get-parameter --name '/production/chatapp/ecs/exec_role' --output text --query Parameter.Value", returnStdout: true).trim()
 
-        stage('Deploy'){
+                    TASK_ROLE = sh(script: "aws --region=us-east-1 ssm get-parameter --name '/production/chatapp/ecs/task_role' --output text --query Parameter.Value", returnStdout: true).trim()
+
+                    NAME = sh(script: "aws --region=us-east-1 ssm get-parameter --name '/production/chatapp/ecr/name' --output text --query Parameter.Value", returnStdout: true).trim()
+
+                    IMAGE = sh(script: "aws --region=us-east-1 ssm get-parameter --name '/production/chatapp/ecr/url' --output text --query Parameter.Value", returnStdout: true).trim()
+
+                    BUILDV = sh(script: "cat /home/ubuntu/jenkins/buildID.txt", returnStdout: true).trim()
+
+                    LOG_GROUP = sh(script: "aws --region=us-east-1 ssm get-parameter --name '/production/chatapp/cloudwatch/name' --output text --query Parameter.Value", returnStdout: true).trim()
+                }
+
+            }
+            steps{
+                sh 'rm /home/ubuntu/jenkins/main.tf'
+                sh 'cp /home/ubuntu/jenkins/templates/main.tf /home/ubuntu/jenkins/terraform/main.tf'
+                sh 'sed -i "s/1111111/${EXEC_ROLE}/g" /home/ubuntu/jenkins/terraform/main.tf'
+                sh 'sed -i "s/2222222/${TASK_ROLE}/g" /home/ubuntu/jenkins/terraform/main.tf'
+                sh 'sed -i "s/3333333/${NAME}/g" /home/ubuntu/jenkins/terraform/main.tf'
+                sh 'sed -i "s/4444444/${IMAGE}/g" /home/ubuntu/jenkins/terraform/main.tf'
+                sh 'sed -i "s/5555555/${BUILDV}/g" /home/ubuntu/jenkins/terraform/main.tf'
+                sh 'sed -i "s/0000000/${LOG_GROUP}/g" /home/ubuntu/jenkins/terraform/main.tf'
+            }
+        }
+
+        stage('Deploy w/ Terraform') {
             when {
                 branch 'main'
             }
             environment{
                 BUILDV = sh(script: "cat /home/ubuntu/jenkins/buildID.txt", returnStdout: true).trim()
+                input message: 'Which branch and environment do you want to deploy?',
+                    parameters: [
+                        choice(name: 'ENVIRONMENT', choices: ['production', 'staging'], description: 'Environment')
+                    ]
             }
             steps {
                 withAWS(region:'us-east-1',credentials:'dabanolo-aws-credentials'){
 
-                    input message: 'Which branch and environment do you want to deploy?',
-                    parameters: [
-                        choice(name: 'BRANCH', choices: ['master', 'dev'], description: 'Branch'),
-                        choice(name: 'ENVIRONMENT', choices: ['prod', 'staging'], description: 'Environment')
-                    ]
+                    if (env.ENVIRONMENT == 'production') {
+                        sh 'cd /home/ubuntu/jenkins/terraform && terraform init && terraform apply -auto-approve'
+                    }
+                    sh 'echo "DONE"'
                 }
-                sh 'echo "DONE"'
             }
         }
     }
