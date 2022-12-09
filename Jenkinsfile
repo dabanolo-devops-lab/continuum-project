@@ -133,22 +133,35 @@ pipeline {
         }
 
         stage('Deploy w/ Terraform') {
-            when {
-                branch 'main'
-            }
+
             environment{
                 BUILDV = sh(script: "cat /home/ubuntu/jenkins/buildID.txt", returnStdout: true).trim()
             }
+            parameters {
+                choice(name: 'ENVIRONMENT', choices: ['production', 'staging'], description: 'Environment')
+            }
+            when {
+                branch 'main'
+            }
             steps {
+                
                 withAWS(region:'us-east-1',credentials:'dabanolo-aws-credentials'){
-                    input message: 'Which branch and environment do you want to deploy?',
-                    parameters: [
-                        choice(name: 'ENVIRONMENT', choices: ['production', 'staging'], description: 'Environment')
-                    ]
-                    if (env.ENVIRONMENT == 'production') {
-                        sh 'cd /home/ubuntu/jenkins/terraform && terraform init && terraform apply -auto-approve'
+                    script {
+                    def USER_INPUT = input(
+                        message: 'Which branch and environment do you want to deploy?',
+                        parameters: [
+                            [$class: 'ChoiceParameterDefinition',
+                            choices: ['dev', 'main'].join('\n'),
+                            name: 'Environment',
+                            description: 'Environment to deploy to']
+                        ])
+                        if( "${USER_INPUT}" == "main"){
+                            sh 'cd /home/ubuntu/jenkins/terraform && terraform init && terraform apply -auto-approve'
+                        } else {
+                            sh 'echo "DONE"'
+                        }
+
                     }
-                    sh 'echo "DONE"'
                 }
             }
         }
