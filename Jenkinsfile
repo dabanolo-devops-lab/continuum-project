@@ -116,7 +116,7 @@ pipeline {
 
                 BUILDV = sh(script: "cat /home/ubuntu/jenkins/buildID.txt", returnStdout: true).trim()
 
-                LOG_GROUP = '/ecs/chat-app'
+                LOG_GROUP = "/ecs/chat-app"
 
 
             }
