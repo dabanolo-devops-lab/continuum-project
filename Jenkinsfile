@@ -114,6 +114,7 @@ pipeline {
                         choice(name: 'ENVIRONMENT', choices: ['prod', 'staging'], description: 'Environment')
                     ]
                 }
+                sh 'echo "DONE"'
             }
         }
     }
