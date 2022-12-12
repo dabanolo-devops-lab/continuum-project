@@ -1,8 +1,27 @@
 {
 	"name": "chat-app",
+	"description": "Continuum chat app",
 	"version": "0.0.1",
 	"private": true,
+	"author": "Danny Bañol",
+	"type": "module",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/dabanolo-devops-lab/continuum-project.git"
+	},
+	"keywords": [
+		"websocket",
+		"socketio",
+		"chat",
+		"node"
+	],
+	"bugs": {
+		"url": "https://github.com/dabanolo-devops-lab/continuum-project/issues"
+	},
+	"homepage": "https://github.com/dabanolo-devops-lab/continuum-project#readme",
 	"scripts": {
+		"start": "node ./server/index.js",
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
@@ -16,6 +35,7 @@
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
 		"@sveltejs/adapter-auto": "next",
+		"@sveltejs/adapter-node": "^1.0.0-next.104",
 		"@sveltejs/kit": "next",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
 		"@typescript-eslint/parser": "^5.45.0",
@@ -32,7 +52,6 @@
 		"vite": "^4.0.0",
 		"vitest": "^0.25.3"
 	},
-	"type": "module",
 	"dependencies": {
 		"express": "^4.18.2",
 		"http-server": "^14.1.1",
