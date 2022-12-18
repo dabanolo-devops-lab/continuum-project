@@ -12,22 +12,6 @@ export const webSocketServer = {
 			socket.emit('eventFromServer', 'Hello from the server');
 		})
 	}
-	// async handle({ request, resolve }) {
-	// 	const response = await resolve(request);
-	// 	if (response.status === 200 && request.path === '/socket.io') {
-	// 		const io = new server(response.body, {
-	// 			path : '/socket.io',
-	// 			serveClient : false
-	// 		});
-	// 		io.on('connection', (socket) => {
-	// 			console.log('a user connected');
-	// 			socket.on('disconnect', () => {
-	// 				console.log('user disconnected');
-	// 			});
-	// 		});
-	// 	}
-	// 	return response;
-	// }
 }
 
 /** @type {import('@sveltejs/kit').Config} */
