@@ -2,20 +2,9 @@ def COLOR_MAP = [
     'SUCCESS': 'good', 
     'FAILURE': 'danger',
 ]
+def scannerHome = tool 'SQ_Scanner';
 
 pipeline {
-    node {
-        stage('SCM') {
-            checkout scm
-        }
-        stage('SonarQube Analysis') {
-            def scannerHome = tool 'SQ_Scanner';
-            withSonarQubeEnv() {
-            sh "${scannerHome}/bin/sonar-scanner"
-            }
-        }
-    }
-
 //     agent {
 //         node {
 //             label 'node'
@@ -31,30 +20,45 @@ pipeline {
 //         ansiColor('xterm')
 //     }
 
-//     stages {
+    stages {
         
-//         stage('Checkout Sources') {
-//             when {
-//                 not{
-//                     branch 'main'
-//                 }
-//             }
-//             steps {
+        stage('Checkout Sources') {
+            when {
+                not{
+                    branch 'main'
+                }
+            }
+            steps {
 //                 git branch: '${BRANCH_NAME}', credentialsId: 'jenkins-dabanolo-continuum', url: 'https://github.com/dabanolo-devops-lab/continuum-project'
-//             }
-//         }
+                git branch: '${BRANCH_NAME}', credentialsId: 'github_continuum', url: 'https://github.com/dabanolo-devops-lab/continuum-project'
+            }
+
+        }
+        stage('SonarQube Analysis') {
+            when {
+                not{
+                    branch 'main'
+                }
+            }
+            steps {
+                withSonarQubeEnv() {
+                    sh "${scannerHome}/bin/sonar-scanner"
+                }
+            }
+        }
     
-//         stage('Build') {
-//             when {
-//                 not{
-//                     branch 'main'
-//                 }
-//             }
+        // stage('Build') {
+            // when {
+                // not{
+                    // branch 'main'
+                // }
+            // }
+
 //             steps {
 //                 sh 'docker images prune'
 //                 sh 'docker build -t chatapp/testphase:${BUILD_ID} .'
 //             }
-//         }
+        // }
         
 //         stage('Unit Testing') {
 //             when {
