@@ -2,7 +2,7 @@ def COLOR_MAP = [
     'SUCCESS': 'good', 
     'FAILURE': 'danger',
 ]
-def scannerHome = tool 'SQ_Scanner';
+
 
 pipeline {
     agent any
@@ -12,10 +12,11 @@ pipeline {
 //         }
 //     }
 
-//     environment {
+    environment {
+        def scannerHome = tool 'SQ_Scanner';
 //         ECR_REPOSITORY = credentials('chat-ecr-repository')
 //         VERSION = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
-//     }
+    }
 
 //     options {
 //         ansiColor('xterm')
