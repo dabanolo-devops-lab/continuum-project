@@ -30,7 +30,8 @@ pipeline {
             }
             steps {
 //                 git branch: '${BRANCH_NAME}', credentialsId: 'jenkins-dabanolo-continuum', url: 'https://github.com/dabanolo-devops-lab/continuum-project'
-                git branch: '${BRANCH_NAME}', credentialsId: 'github_continuum', url: 'https://github.com/dabanolo-devops-lab/continuum-project'
+                // git branch: '${BRANCH_NAME}', credentialsId: 'github_continuum', url: 'https://github.com/dabanolo-devops-lab/continuum-project'
+                checkout scm
             }
 
         }
