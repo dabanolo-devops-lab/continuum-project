@@ -5,6 +5,7 @@ def COLOR_MAP = [
 def scannerHome = tool 'SQ_Scanner';
 
 pipeline {
+    agent any
 //     agent {
 //         node {
 //             label 'node'
