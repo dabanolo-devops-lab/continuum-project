@@ -43,9 +43,17 @@ pipeline {
                     branch 'main'
                 }
             }
+            environment {
+                SCANNER_HOME = tool 'SQ_Scanner';
+            }
             steps {
-                withSonarQubeEnv() {
-                    sh "${scannerHome}/bin/sonar-scanner"
+                withSonarQubeEnv('SonarQube') {
+                    sh '''${SCANNER_HOME}/bin/sonar-scanner \
+                    -Dsonar.organization=dabanolo-devops-lab \
+                    -Dsonar.java.binaries=build/classes/java/ \
+                    -Dsonar.projectKey=dabanolo-devops-lab_continuum-project \
+                    -Dsonar.sources=. \
+                    '''
                 }
             }
         }
