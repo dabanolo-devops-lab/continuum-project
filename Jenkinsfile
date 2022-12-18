@@ -47,7 +47,7 @@ pipeline {
                 }
             }
         }
-    
+    }
         // stage('Build') {
             // when {
                 // not{
