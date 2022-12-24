@@ -130,7 +130,7 @@ pipeline {
             }
             steps {
                 sh """#!/bin/bash -el
-                trivy image --format template --template "@contrib/junit.tpl" --output trivy-results.xml ${ECR_REPOSITORY}/chat-app:${BUILD_VERSION}
+                trivy image --format template --template "/home/ubuntu/jenkins/tools/junit.tpl" --output trivy-results.xml ${ECR_REPOSITORY}/chat-app:${BUILD_VERSION}
                 """.trim()
             }
         }
