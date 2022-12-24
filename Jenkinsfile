@@ -113,7 +113,7 @@ pipeline {
                 """, returnStdout: true).trim()
             }
             steps {
-                sh 'docker build -t ${ECR_REPOSITORY}/chat-app:${BUILD_VERSION} -f prod.Dockerfile .'
+                sh 'docker build -t ${ECR_REPOSITORY}:${BUILD_VERSION} -f prod.Dockerfile .'
             }
         }
 
@@ -130,7 +130,7 @@ pipeline {
             }
             steps {
                 sh """#!/bin/bash -el
-                trivy image --format template --template "/home/ubuntu/jenkins/tools/junit.tpl" --output trivy-results.xml ${ECR_REPOSITORY}/chat-app:${BUILD_VERSION}
+                trivy image --format template --template "/home/ubuntu/jenkins/tools/junit.tpl" --output trivy-results.xml ${ECR_REPOSITORY}:${BUILD_VERSION}
                 """.trim()
             }
         }
@@ -148,7 +148,7 @@ pipeline {
             steps {
                 withAWS(region:'us-east-1',credentials:'aws_dabanolo'){
                     sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ECR_REPOSITORY}'
-                    sh 'docker push ${ECR_REPOSITORY}/chat-app:${BUILD_VERSION}'
+                    sh 'docker push ${ECR_REPOSITORY}:${BUILD_VERSION}'
                 }
 
             }
