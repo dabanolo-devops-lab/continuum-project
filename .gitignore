@@ -3,3 +3,4 @@ node_modules/
 updating/
 .scannerwork/
 chat-app/*
+test-results*

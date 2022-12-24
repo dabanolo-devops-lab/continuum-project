@@ -10,8 +10,6 @@ describe('socket.io chat app', () => {
   let client1, client2;
 
   beforeEach(done => {
-
-    httpServer;
     
     client1 = new Client('http://localhost:3000');
     client2 = new Client('http://localhost:3000');

@@ -34,15 +34,18 @@ pipeline {
 
         }
 
-        stage('Testing Build'){
+        stage('Test Build'){
             when {
                 not{
                     branch 'main'
                 }
             }
             steps{
-                sh 'cd app'
-                sh 'npm install'
+                dir("./app"){
+                    sh """#!/bin/bash -el
+                    npm install
+                    """.trim()
+                }
             }
         }
 
@@ -53,8 +56,11 @@ pipeline {
                 }
             }
             steps{
-
-                sh 'npm test'
+                dir("./app"){
+                    sh """#!/bin/bash -el
+                    npm test
+                    """.trim()
+                }
             }
         }
 
@@ -93,14 +99,24 @@ pipeline {
             }
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    sh '''${SCANNER_HOME}/bin/sonar-scanner \
-                    -Dsonar.organization=dabanolo-devops-lab \
-                    -Dsonar.projectName=continuum-project \
-                    -Dsonar.projectKey=dabanolo-devops-lab_continuum-project \
-                    -Dsonar.sources=.
-                    -Dsonar.projectVersion=1.0
-                    -Dsonar.exclusions=app/**/node_modules/**/*
-                    '''
+                    
+                    sh """#!/bin/bash -el
+                    ls -las
+                    ${SCANNER_HOME}/bin/sonar-scanner
+                    """.trim()
+                }
+            }
+        }
+        
+        stage('Quality Gate') {
+            when {
+                not{
+                    branch 'main'
+                }
+            }
+            steps {
+                timeout(time: 1, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
                 }
             }
         }
@@ -118,7 +134,9 @@ pipeline {
                 branch 'dev'
             }
             steps {
-                sh 'trivy image chatapp/testphase:${BUILD_ID}'
+                sh """#!/bin/bash -el
+                trivy image chatapp/testphase:${BUILD_ID}
+                """.trim()
             }
         }
 
@@ -211,6 +229,11 @@ pipeline {
                     }
                 }
             }
+        }
+    }
+    post {
+        always {
+            junit './app/test/*.xml'
         }
     }
 }
