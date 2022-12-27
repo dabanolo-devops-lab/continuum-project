@@ -15,6 +15,11 @@ pipeline {
 
     options {
         ansiColor('xterm')
+        office365ConnectorWebhooks([[
+            name: 'Teams-JK-Alerts',
+            startNotification: true,
+            url: 'https://unaledu.webhook.office.com/webhookb2/ceab6fb2-ca5b-4d5d-9885-b7bcc5299c0e@577fc1d8-0922-458e-87bf-ec4f455eb600/IncomingWebhook/7cc7c93a924e499e92024375cff65836/95e094a2-b2d3-4dff-a40c-47b9fe3f5404'
+        ]])
     }
     stages {
         
@@ -98,7 +103,7 @@ pipeline {
                 branch 'dev'
             }
             steps {
-                sh 'echo "$(date +"%y.%m.%d")"."$(date +"%s" | cut -c6-10)" >> /home/ubuntu/jenkins/build_version'
+                sh 'echo "$(date +"%y.%m.%d")"."$(date +"%H%M%S")" >> /home/ubuntu/jenkins/build_version'
             }
         }
 
@@ -153,42 +158,6 @@ pipeline {
 
             }
         }
-        // stage('Task Config'){
-        //     when {
-        //         branch 'main'
-        //     }
-        //     environment{
-
-        //         EXEC_ROLE = credentials('aws-exec-role')
-
-        //         TASK_ROLE = credentials('aws-task-role')
-
-        //         NAME = credentials('cluster-name')
-
-        //         IMAGE = credentials('chat-ecr-repository')
-
-        //         BUILD_VERSION = sh(script: """
-        //         #!/bin/bash -el
-        //         tail -n 1 /home/ubuntu/jenkins/build_version
-        //         """, returnStdout: true).trim()
-
-        //         LOG_GROUP = "/ecs/chat-app"
-
-
-        //     }
-        //     steps{
-        //         sh 'rm /home/ubuntu/jenkins/terraform/main.tf'
-        //         sh 'cp /home/ubuntu/jenkins/templates/main.tf /home/ubuntu/jenkins/terraform/main.tf'
-        //         sh'''
-        //         sed -i "s#1111111#${EXEC_ROLE}#g" /home/ubuntu/jenkins/terraform/main.tf
-        //         sed -i "s#2222222#${TASK_ROLE}#g" /home/ubuntu/jenkins/terraform/main.tf
-        //         sed -i "s#3333333#${NAME}#g" /home/ubuntu/jenkins/terraform/main.tf
-        //         sed -i "s#4444444#${IMAGE}#g" /home/ubuntu/jenkins/terraform/main.tf
-        //         sed -i "s#5555555#${BUILDV}#g" /home/ubuntu/jenkins/terraform/main.tf
-        //         sed -i "s#0000000#${LOG_GROUP}#g" /home/ubuntu/jenkins/terraform/main.tf
-        //         '''
-        //     }
-        // }
 
         stage('Deploy w/ Terraform') {
 
@@ -228,6 +197,21 @@ pipeline {
             dir("./app"){
                 junit allowEmptyResults: true, testResults: '*.xml'
             }
+        }
+        success {
+            office365ConnectorSend webhookUrl: "https://unaledu.webhook.office.com/webhookb2/ceab6fb2-ca5b-4d5d-9885-b7bcc5299c0e@577fc1d8-0922-458e-87bf-ec4f455eb600/IncomingWebhook/7cc7c93a924e499e92024375cff65836/95e094a2-b2d3-4dff-a40c-47b9fe3f5404",
+                factDefinitions: [[name: "Branch", template: "${BRANCH_NAME}"],
+                                  [name: "Job", template: "${JOB_NAME}"]]
+        }
+        aborted {
+            office365ConnectorSend webhookUrl: "https://unaledu.webhook.office.com/webhookb2/ceab6fb2-ca5b-4d5d-9885-b7bcc5299c0e@577fc1d8-0922-458e-87bf-ec4f455eb600/IncomingWebhook/6ad2005726044cb7879331c7537f6804/95e094a2-b2d3-4dff-a40c-47b9fe3f5404",
+                factDefinitions: [[name: "Branch", template: "${BRANCH_NAME}"],
+                                  [name: "Job", template: "${JOB_NAME}"]]
+        }
+        failure {
+            office365ConnectorSend webhookUrl: "https://unaledu.webhook.office.com/webhookb2/ceab6fb2-ca5b-4d5d-9885-b7bcc5299c0e@577fc1d8-0922-458e-87bf-ec4f455eb600/IncomingWebhook/e26dfa085e4c48d7b68a5f81011e63e9/95e094a2-b2d3-4dff-a40c-47b9fe3f5404",
+                factDefinitions: [[name: "Branch", template: "${BRANCH_NAME}"],
+                                  [name: "Job", template: "${JOB_NAME}"]]
         }
     }
 }
