@@ -16,7 +16,7 @@ body{
   width: 100vw;
   height: 100vh;
   background: rgb(255,226,44);
-  background: linear-gradient(90deg, rgba(255,226,44,1) 0%, rgba(255,167,36,1) 100%);
+  background: linear-gradient(140deg, rgb(255 44 83) 0%, rgb(36 255 93) 100%);
 }
 
 main{
